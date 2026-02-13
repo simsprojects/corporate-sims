@@ -1,0 +1,19 @@
+{
+  "name": "corporate-sims-multiplayer",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Hard Workers Finish Last - Multiplayer Corporate Sim",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "sql.js": "^1.11.0",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.21.0",
+    "nanoid": "^5.0.0",
+    "socket.io": "^4.8.0",
+    "zod": "^3.23.0"
+  }
+}

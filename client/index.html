@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hard Workers Finish Last - The Art of Looking Busy</title>
+    <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+
+<!-- ==================== LOBBY ==================== -->
+<div id="lobby" class="lobby-container">
+    <div class="lobby-header">
+        <h1>Hard Workers Finish Last</h1>
+        <p class="subtitle">The Art of Looking Busy - Multiplayer Edition</p>
+    </div>
+
+    <div class="lobby-form">
+        <div class="form-group">
+            <label for="player-name">Your Name</label>
+            <input type="text" id="player-name" value="Employee" maxlength="20" placeholder="Enter your name">
+        </div>
+
+        <div class="form-group">
+            <label for="room-id">Room</label>
+            <input type="text" id="room-id" value="default" maxlength="30" placeholder="Room name">
+        </div>
+
+        <div class="form-section-title">Appearance</div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="skin-tone">Skin</label>
+                <input type="color" id="skin-tone" value="#f5d0b0">
+            </div>
+            <div class="form-group">
+                <label for="hair-color">Hair</label>
+                <input type="color" id="hair-color" value="#2a1a0a">
+            </div>
+            <div class="form-group">
+                <label for="shirt-color">Shirt</label>
+                <input type="color" id="shirt-color" value="#3498db">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Hair Style</label>
+            <div class="hair-options">
+                <button class="hair-option selected" data-style="short" onclick="selectHair(this)">Short</button>
+                <button class="hair-option" data-style="long" onclick="selectHair(this)">Long</button>
+                <button class="hair-option" data-style="bun" onclick="selectHair(this)">Bun</button>
+                <button class="hair-option" data-style="buzz" onclick="selectHair(this)">Buzz</button>
+                <button class="hair-option" data-style="curly" onclick="selectHair(this)">Curly</button>
+                <button class="hair-option" data-style="ponytail" onclick="selectHair(this)">Ponytail</button>
+            </div>
+        </div>
+
+        <button class="btn-primary" onclick="handleJoin()">Enter the Office</button>
+    </div>
+</div>
+
+<!-- ==================== GAME ==================== -->
+<div id="game" class="game-wrapper" style="display:none">
+
+    <!-- HEADER -->
+    <header class="header">
+        <h1>Hard Workers Finish Last</h1>
+        <div id="time-display" class="time-info">
+            <span class="time-day">Week 1 - Mon</span>
+            <span class="time-clock">9:00 AM</span>
+        </div>
+        <div class="header-buttons">
+            <span class="online-count" id="online-count">0 online</span>
+        </div>
+    </header>
+
+    <!-- LEFT PANEL: Characters -->
+    <div class="panel panel-left" id="panel-left">
+        <h2>Office People</h2>
+        <div id="character-list"></div>
+    </div>
+
+    <!-- CENTER: Canvas -->
+    <div class="game-canvas-wrapper">
+        <canvas id="game-canvas" width="720" height="450"></canvas>
+    </div>
+
+    <!-- RIGHT PANEL: Selected Character + Actions -->
+    <div class="panel panel-right" id="panel-right">
+        <h2>Details</h2>
+        <div id="selected-panel">
+            <div class="no-selection">Click a character to inspect</div>
+        </div>
+
+        <h2>Actions</h2>
+        <div id="action-menu">
+            <div class="no-actions">Join a room to see actions</div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL OVERLAY ==================== -->
+<div id="modal-overlay" class="modal-overlay"></div>
+
+<!-- ==================== NOTIFICATIONS ==================== -->
+<div id="notifications" class="toast-container"></div>
+
+<!-- ==================== SCRIPTS ==================== -->
+<script src="https://cdn.socket.io/4.8.0/socket.io.min.js"></script>
+
+<script>
+    // Hair style selector
+    function selectHair(btn) {
+        document.querySelectorAll('.hair-option').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    // Join game handler
+    function handleJoin() {
+        const playerName = document.getElementById('player-name').value.trim() || 'Employee';
+        const roomId = document.getElementById('room-id').value.trim() || 'default';
+        const skinTone = document.getElementById('skin-tone').value;
+        const hairColor = document.getElementById('hair-color').value;
+        const shirtColor = document.getElementById('shirt-color').value;
+        const selectedHair = document.querySelector('.hair-option.selected');
+        const hairStyle = selectedHair ? selectedHair.dataset.style : 'short';
+
+        if (typeof window.joinGame === 'function') {
+            window.joinGame({
+                roomId,
+                playerName,
+                character: {
+                    name: playerName,
+                    role: 'Employee',
+                    skinTone,
+                    hairColor,
+                    hairStyle,
+                    shirtColor
+                }
+            });
+        } else {
+            alert('Still connecting to server. Please wait a moment and try again.');
+        }
+    }
+
+    // Enter key to join
+    document.addEventListener('keydown', (e) => {
+        const lobby = document.getElementById('lobby');
+        if (e.key === 'Enter' && lobby && lobby.style.display !== 'none') {
+            handleJoin();
+        }
+    });
+</script>
+
+<script type="module" src="js/main.js"></script>
+
+</body>
+</html>
