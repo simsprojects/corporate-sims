@@ -90,7 +90,7 @@ socketHandler.init();
 // ========== Start Server ==========
 
 const PORT = SERVER.PORT;
-httpServer.listen(PORT, () => {
+httpServer.listen(PORT, '0.0.0.0', () => {
     console.log('');
     console.log('  ╔═══════════════════════════════════════════════╗');
     console.log('  ║   🎬 Hard Workers Finish Last — Server        ║');
